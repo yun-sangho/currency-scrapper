@@ -50,8 +50,9 @@ def run_scrapper():
     print("스크래핑을 시작합니다.")
 
     SCRAP_URL = os.getenv('SCRAP_URL')
+    CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH')
 
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH)
     driver.get(SCRAP_URL)
     driver.implicitly_wait(100)
 
