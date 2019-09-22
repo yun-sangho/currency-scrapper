@@ -2,11 +2,13 @@ from scrapper import run_scrapper
 from sheet import insert_data
 from mailer import send_mail
 from dotenv import load_dotenv
+from os.path import join, dirname
 
 def start_app():
   print('App 작동 시작합니다.')
 
-  load_dotenv()
+  dotenv_path = join(dirname(__file__), '.env')
+  load_dotenv(dotenv_path)
 
   try:
     data = run_scrapper()
