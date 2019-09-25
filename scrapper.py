@@ -61,9 +61,6 @@ def run_scrapper():
     # if there is not an alret window, parse currency data
     except Exception as e:
         print(e)
-        
-        alret.accept()
-        driver.implicitly_wait(500)
 
         data = parse_currency_data(driver)        
     # if there is, do not parse data
