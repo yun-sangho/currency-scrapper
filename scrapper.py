@@ -1,7 +1,5 @@
 from selenium import webdriver
-from dotenv import load_dotenv
 import re
-import os
 
 """
 환율 날짜 정보를 날짜 선택 창에서 가지고옵니다.
@@ -19,7 +17,7 @@ def parse_date(driver):
 def parse_currency_data(driver):
     currency_data = []
     date = parse_date(driver)
-
+            
     # parse currency talbes
     tables = driver.find_elements_by_class_name("table_type7")
 
@@ -49,19 +47,33 @@ def parse_currency_data(driver):
 def run_scrapper():
     print("스크래핑을 시작합니다.")
 
-    SCRAP_URL = os.getenv('SCRAP_URL')
-    CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH')
+    options = webdriver.ChromeOptions()
 
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH)
-    driver.get(SCRAP_URL)
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1280x1696")
+    options.add_argument("--disable-application-cache")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--hide-scrollbars")
+    options.add_argument("--enable-logging")
+    options.add_argument("--log-level=0")
+    options.add_argument("--single-process")
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--homedir=/tmp")
+    options.binary_location = "./bin/headless-chromium"
+
+    driver = webdriver.Chrome(
+        "./bin/chromedriver",
+        chrome_options=options)
+    driver.get('http://www.smbs.biz/ExRate/TodayExRate.jsp')
     driver.implicitly_wait(100)
 
     try:
-        alret = driver.switch_to.alert
+        driver.switch_to.alert
     # if there is not an alret window, parse currency data
     except Exception as e:
         print(e)
-
         data = parse_currency_data(driver)        
     # if there is, do not parse data
     else:
